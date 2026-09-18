@@ -1,0 +1,830 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evaluación inicial DASP</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+  :root{
+    --azul:#0f4c75;
+    --azul-osc:#0a3457;
+    --teal:#1b9c85;
+    --teal-osc:#137a68;
+    --fondo:#eef3f5;
+    --tarjeta:#ffffff;
+    --texto:#1c2b33;
+    --texto-suave:#5a6b74;
+    --borde:#dbe4e9;
+    --borde-fuerte:#c3d2d8;
+    --rojo:#c0392b;
+    --rojo-fondo:#fdeeee;
+    --verde:#1b9c85;
+    --verde-fondo:#eafaf3;
+    --aviso-fondo:#eaf6f2;
+    --aviso-borde:#bfe6da;
+    --aviso-texto:#0d5c4d;
+    --opcion-fondo:#f7fcfb;
+    --campo-fondo:#fbfdfe;
+    --unidad-fondo:#e6f5f1;
+    --btn-disabled:#a9c2c5;
+    --verde-fuerte:#1a8f5c;
+    --verde-borde:#bfe9d4;
+    --rojo-borde:#f3caca;
+    --barra-fondo:#e2eaed;
+    --texto-pie:#8a9aa2;
+    --sombra: 0 2px 10px rgba(15,76,117,0.08);
+    --fuente-titulo:"IBM Plex Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --fuente-texto:"IBM Plex Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --fuente-num:"IBM Plex Mono", "Consolas", "Menlo", monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --azul:#5aa9d6;
+      --azul-osc:#eaf3f8;
+      --teal:#3fcaa8;
+      --teal-osc:#2fae8f;
+      --fondo:#12191d;
+      --tarjeta:#1b2429;
+      --texto:#e7eef1;
+      --texto-suave:#9fb0b7;
+      --borde:#2c383e;
+      --borde-fuerte:#3a4a51;
+      --rojo:#e2685a;
+      --rojo-fondo:#3a2224;
+      --verde:#3fcaa8;
+      --verde-fondo:#173229;
+      --aviso-fondo:#173229;
+      --aviso-borde:#25493c;
+      --aviso-texto:#8fe3c8;
+      --opcion-fondo:#20292e;
+      --campo-fondo:#20292e;
+      --unidad-fondo:#1c3c33;
+      --btn-disabled:#3a4a4c;
+      --verde-fuerte:#3fcaa8;
+      --verde-borde:#2b5747;
+      --rojo-borde:#5a2f30;
+      --barra-fondo:#263136;
+      --texto-pie:#6d7d84;
+      --sombra: 0 2px 14px rgba(0,0,0,0.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --azul:#5aa9d6;
+    --azul-osc:#eaf3f8;
+    --teal:#3fcaa8;
+    --teal-osc:#2fae8f;
+    --fondo:#12191d;
+    --tarjeta:#1b2429;
+    --texto:#e7eef1;
+    --texto-suave:#9fb0b7;
+    --borde:#2c383e;
+    --borde-fuerte:#3a4a51;
+    --rojo:#e2685a;
+    --rojo-fondo:#3a2224;
+    --verde:#3fcaa8;
+    --verde-fondo:#173229;
+    --aviso-fondo:#173229;
+    --aviso-borde:#25493c;
+    --aviso-texto:#8fe3c8;
+    --opcion-fondo:#20292e;
+    --campo-fondo:#20292e;
+    --unidad-fondo:#1c3c33;
+    --btn-disabled:#3a4a4c;
+    --verde-fuerte:#3fcaa8;
+    --verde-borde:#2b5747;
+    --rojo-borde:#5a2f30;
+    --barra-fondo:#263136;
+    --texto-pie:#6d7d84;
+    --sombra: 0 2px 14px rgba(0,0,0,0.35);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important; animation:none !important;}
+  }
+  body{
+    background:var(--fondo);
+    color:var(--texto);
+    font-family:var(--fuente-texto);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:24px 14px 60px;
+  }
+  .wrap{
+    width:100%;
+    max-width:720px;
+  }
+  header.top{
+    text-align:center;
+    margin-bottom:22px;
+  }
+  header.top h1{
+    font-family:var(--fuente-titulo);
+    font-weight:700;
+    font-size:1.4rem;
+    color:var(--azul-osc);
+    margin:0 0 4px;
+    text-wrap:balance;
+  }
+  header.top p{
+    margin:0;
+    color:var(--texto-suave);
+    font-size:0.92rem;
+  }
+  .card{
+    background:var(--tarjeta);
+    border-radius:14px;
+    box-shadow:var(--sombra);
+    padding:28px 26px;
+    border:1px solid var(--borde);
+  }
+  .aviso{
+    background:var(--aviso-fondo);
+    border:1px solid var(--aviso-borde);
+    border-left:5px solid var(--teal);
+    border-radius:8px;
+    padding:14px 16px;
+    font-size:0.92rem;
+    color:var(--aviso-texto);
+    margin-bottom:22px;
+    line-height:1.5;
+  }
+  .campo{
+    margin-bottom:16px;
+  }
+  .campo label{
+    display:block;
+    font-weight:600;
+    font-size:0.9rem;
+    margin-bottom:6px;
+    color:var(--azul-osc);
+  }
+  .campo input, .campo select{
+    width:100%;
+    padding:11px 12px;
+    border:1px solid var(--borde);
+    border-radius:8px;
+    font-size:1rem;
+    font-family:inherit;
+    background:var(--campo-fondo);
+    color:var(--texto);
+  }
+  .campo input:focus, .campo select:focus{
+    outline:2px solid var(--teal);
+    outline-offset:1px;
+    border-color:var(--teal);
+  }
+  .fila2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+  }
+  @media (max-width:520px){
+    .fila2{grid-template-columns:1fr;}
+    .card{padding:22px 18px;}
+  }
+  .btn{
+    appearance:none;
+    border:none;
+    background:var(--teal);
+    color:#fff;
+    font-size:1rem;
+    font-weight:600;
+    padding:13px 22px;
+    border-radius:9px;
+    cursor:pointer;
+    transition:background .15s ease, transform .05s ease;
+  }
+  .btn:hover:not(:disabled){background:var(--teal-osc);}
+  .btn:active:not(:disabled){transform:scale(0.98);}
+  .btn:focus-visible, .opcion input:focus-visible{
+    outline:2px solid var(--azul);
+    outline-offset:2px;
+  }
+  .btn:disabled{background:var(--btn-disabled);cursor:not-allowed;}
+  .btn.secundario{
+    background:transparent;
+    color:var(--azul);
+    border:1px solid var(--borde-fuerte);
+  }
+  .btn.secundario:hover:not(:disabled){background:var(--opcion-fondo);}
+  .btn-fila{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    margin-top:24px;
+  }
+  .btn-fila .der{margin-left:auto;}
+  .error-txt{
+    color:var(--rojo);
+    font-size:0.85rem;
+    margin-top:10px;
+    display:none;
+  }
+
+  /* progreso */
+  .progreso-wrap{
+    margin-bottom:22px;
+  }
+  .progreso-texto{
+    display:flex;
+    justify-content:space-between;
+    font-family:var(--fuente-num);
+    font-variant-numeric:tabular-nums;
+    font-size:0.85rem;
+    color:var(--texto-suave);
+    margin-bottom:6px;
+    font-weight:600;
+  }
+  .barra-fondo{
+    width:100%;
+    height:10px;
+    background:var(--barra-fondo);
+    border-radius:6px;
+    overflow:hidden;
+  }
+  .barra-rellena{
+    height:100%;
+    background:linear-gradient(90deg, var(--teal), var(--azul));
+    border-radius:6px;
+    transition:width .25s ease;
+  }
+  .unidad-tag{
+    display:inline-block;
+    font-family:var(--fuente-num);
+    font-size:0.72rem;
+    font-weight:600;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    color:var(--teal-osc);
+    background:var(--unidad-fondo);
+    padding:4px 10px;
+    border-radius:20px;
+    margin-bottom:14px;
+  }
+  .pregunta-texto{
+    font-family:var(--fuente-titulo);
+    font-size:1.15rem;
+    font-weight:600;
+    color:var(--azul-osc);
+    margin:0 0 20px;
+    line-height:1.45;
+    text-wrap:balance;
+  }
+  fieldset{
+    border:none;
+    padding:0;
+    margin:0;
+  }
+  .opcion{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    border:1px solid var(--borde);
+    border-radius:9px;
+    padding:13px 14px;
+    margin-bottom:10px;
+    cursor:pointer;
+    transition:border-color .12s ease, background .12s ease;
+  }
+  .opcion:hover{border-color:var(--teal);background:var(--opcion-fondo);}
+  .opcion.seleccionada{
+    border-color:var(--teal);
+    background:var(--verde-fondo);
+  }
+  .opcion input{
+    margin-top:3px;
+    accent-color:var(--teal);
+    width:18px;
+    height:18px;
+    flex-shrink:0;
+  }
+  .opcion span{font-size:0.98rem;line-height:1.4;}
+
+  /* resumen */
+  .resumen-num{
+    display:flex;
+    gap:16px;
+    margin:18px 0 22px;
+  }
+  .resumen-caja{
+    flex:1;
+    text-align:center;
+    border-radius:10px;
+    padding:16px 8px;
+  }
+  .resumen-caja.ok{background:var(--verde-fondo);border:1px solid var(--verde-borde);}
+  .resumen-caja.ko{background:var(--rojo-fondo);border:1px solid var(--rojo-borde);}
+  .resumen-caja .n{font-family:var(--fuente-num);font-size:2rem;font-weight:600;font-variant-numeric:tabular-nums;}
+  .resumen-caja.ok .n{color:var(--verde-fuerte);}
+  .resumen-caja.ko .n{color:var(--rojo);}
+  .resumen-caja .l{font-size:0.82rem;color:var(--texto-suave);}
+  textarea#areaCopiar{
+    width:100%;
+    min-height:260px;
+    border:1px solid var(--borde);
+    border-radius:8px;
+    padding:12px;
+    font-family:var(--fuente-num);
+    font-size:0.82rem;
+    line-height:1.5;
+    color:var(--texto);
+    background:var(--campo-fondo);
+    resize:vertical;
+  }
+  .estado-envio{
+    font-size:0.88rem;
+    margin-top:14px;
+    padding:10px 12px;
+    border-radius:8px;
+  }
+  .estado-envio.enviando{background:var(--opcion-fondo);color:var(--texto-suave);}
+  .estado-envio.ok{background:var(--verde-fondo);color:var(--verde-fuerte);}
+  .estado-envio.error{background:var(--rojo-fondo);color:var(--rojo);}
+  footer.pie{
+    text-align:center;
+    margin-top:20px;
+    font-size:0.78rem;
+    color:var(--texto-pie);
+  }
+  .oculto{display:none !important;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>Evaluación inicial · Digitalización Aplicada a los Sectores Productivos</h1>
+    <p id="subtituloUnidad">Ciclos de Grado Superior · Construcciones Metálicas / Diseño en Fabricación Mecánica</p>
+  </header>
+
+  <div class="card" id="tarjeta">
+    <!-- El contenido se genera con JavaScript -->
+  </div>
+
+  <footer class="pie">Prueba de nivel inicial — módulo DASP</footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var FORMSPREE_URL = "https://formspree.io/f/xjyverrn";
+
+  // ---------------------------------------------------------------
+  // Banco de preguntas (40). Cada pregunta: unidad (1-7), texto,
+  // "opciones" en cualquier orden, y el texto EXACTO de la correcta.
+  // ---------------------------------------------------------------
+  var BANCO = [
+    // UT1 — Digitalización en los sistemas productivos
+    {u:1,t:"¿Qué significan las siglas IT en el contexto de la digitalización de empresas?",
+     o:["Information Technology (tecnología de la información)","Internal Transport","Industrial Transformation","Integrated Terminal"],c:0},
+    {u:1,t:"¿Qué significan las siglas OT en el contexto industrial?",
+     o:["Online Trading","Optical Transmission","Operation Technology (tecnología de operación)","Organizational Training"],c:2},
+    {u:1,t:"¿Cuál de los siguientes departamentos de una empresa se considera típicamente un entorno IT?",
+     o:["El taller de producción","El departamento de sistemas / informática","El almacén de materias primas","La línea de montaje"],c:1},
+    {u:1,t:"La digitalización de una empresa consiste principalmente en:",
+     o:["Comprar más ordenadores para la oficina","Sustituir todo el papel por archivos PDF","Incorporar tecnologías digitales que transforman procesos, productos y organización","Contratar exclusivamente personal informático"],c:2},
+    {u:1,t:"¿Qué se entiende por digitalizar una empresa \"de extremo a extremo\"?",
+     o:["Digitalizar solo la parte administrativa","Digitalizar solo la planta de producción","Integrar la digitalización desde el diseño y la producción hasta la venta y el cliente","Digitalizar únicamente el servicio de atención al cliente"],c:2},
+    {u:1,t:"La conexión entre los entornos IT y OT en una fábrica permite principalmente:",
+     o:["Reducir el número de puestos administrativos","Que los sistemas de gestión y los de producción compartan información en tiempo real","Eliminar el mantenimiento de las máquinas","Sustituir a los operarios de planta"],c:1},
+
+    // UT2 — Tecnologías habilitadoras digitales
+    {u:2,t:"¿Qué significan las siglas THD en este módulo?",
+     o:["Transformación Horizontal de Datos","Tecnología de Hardware Digital","Tecnologías Habilitadoras Digitales","Transmisión de Datos Híbrida"],c:2},
+    {u:2,t:"¿Cuál de las siguientes se considera una Tecnología Habilitadora Digital (THD) de la Industria 4.0?",
+     o:["La máquina de escribir","El Internet de las Cosas (IoT)","El fax","El teléfono fijo"],c:1},
+    {u:2,t:"La fabricación aditiva es una tecnología también conocida popularmente como:",
+     o:["Mecanizado CNC","Soldadura robotizada","Corte por láser","Impresión 3D"],c:3},
+    {u:2,t:"¿Qué tecnología permite a un operario ver información digital superpuesta sobre el mundo real, por ejemplo al reparar una máquina?",
+     o:["La realidad aumentada","El blockchain","El big data","El edge computing"],c:0},
+    {u:2,t:"Un \"robot colaborativo\" (cobot) se caracteriza principalmente por:",
+     o:["Trabajar siempre aislado del ser humano por seguridad","Estar diseñado para trabajar junto a personas de forma segura","No necesitar ningún tipo de programación","Sustituir por completo a los operarios de una planta"],c:1},
+    {u:2,t:"Un \"gemelo digital\" (digital twin) es:",
+     o:["Una copia física de repuesto de una máquina","Una réplica virtual de un producto, proceso o sistema físico, actualizada con datos reales","Un segundo operario que revisa el trabajo del primero","Un tipo de cortafuegos industrial"],c:1},
+    {u:2,t:"Las THD contribuyen a una economía más sostenible y eficiente principalmente porque:",
+     o:["Aumentan siempre el consumo de papel","Obligan a duplicar las instalaciones productivas","Permiten optimizar el uso de recursos, energía y materiales mediante datos y automatización","Eliminan la necesidad de reciclar"],c:2},
+
+    // UT3 — Computación en la nube
+    {u:3,t:"La \"computación en la nube\" (cloud computing) consiste en:",
+     o:["Almacenar y procesar datos en servidores remotos accesibles por internet","Guardar los archivos únicamente en el disco duro del ordenador","Un sistema de refrigeración de centros de datos","Un tipo de programa antivirus"],c:0},
+    {u:3,t:"¿Cuál de las siguientes NO es un nivel habitual de servicio en la nube?",
+     o:["SaaS (Software as a Service)","PaaS (Platform as a Service)","IaaS (Infrastructure as a Service)","LaaS (Language as a Service)"],c:3},
+    {u:3,t:"El \"edge computing\" consiste en:",
+     o:["Eliminar por completo el uso de la nube","Procesar los datos cerca de donde se generan, reduciendo lo que se envía a la nube","Un método de cifrado de contraseñas","Un tipo de red social empresarial"],c:1},
+    {u:3,t:"Los conceptos de \"fog computing\" y \"mist computing\" se refieren a:",
+     o:["Sistemas de climatización de servidores","Niveles intermedios de procesamiento de datos entre los dispositivos y la nube","Tipos de virus informáticos","Protocolos usados en impresión 3D"],c:1},
+    {u:3,t:"Una ventaja habitual de usar la nube en sistemas conectados es:",
+     o:["Acceder a la información y a las aplicaciones desde cualquier lugar con conexión a internet","Que los datos ya no necesitan copias de seguridad","Que deja de ser necesaria la conexión a internet","Que se elimina cualquier riesgo de ciberseguridad"],c:0},
+    {u:3,t:"Entre las funciones principales de la nube se encuentra:",
+     o:["El procesamiento de datos y la ejecución de aplicaciones remotas","La fabricación física de piezas metálicas","La soldadura automática de estructuras","El corte de materiales por plasma"],c:0},
+
+    // UT4 — Inteligencia artificial
+    {u:4,t:"La inteligencia artificial (IA) aplicada a la automatización de procesos industriales sirve principalmente para:",
+     o:["Sustituir la electricidad en las máquinas","Optimizar procesos y ayudar a tomar decisiones a partir del análisis de datos","Eliminar la necesidad de sensores","Sustituir los planos de fabricación"],c:1},
+    {u:4,t:"¿Qué relación existe entre la IA y el Big Data en el contexto empresarial?",
+     o:["Son conceptos opuestos que no se relacionan","La IA se alimenta de grandes volúmenes de datos para aprender y generar valor","El Big Data sustituye por completo a la IA","No tienen ninguna aplicación conjunta"],c:1},
+    {u:4,t:"¿Cuál de los siguientes es un lenguaje de programación muy utilizado en proyectos de inteligencia artificial?",
+     o:["Python","HTML","AutoCAD","Photoshop"],c:0},
+    {u:4,t:"En el sector industrial (metal, fabricación mecánica), una aplicación típica de la IA es:",
+     o:["La sustitución total del acero por plástico","El mantenimiento predictivo de máquinas a partir de sus datos de funcionamiento","La eliminación de los planos técnicos","La reducción del número de clientes"],c:1},
+    {u:4,t:"El \"machine learning\" (aprendizaje automático) es:",
+     o:["Un tipo de máquina-herramienta de control numérico","Una rama de la IA en la que los sistemas aprenden a partir de datos, sin programar cada tarea de forma explícita","Un protocolo de red industrial","Un sistema de refrigeración de servidores"],c:1},
+    {u:4,t:"¿Por qué se considera que la IA tendrá una importancia creciente en el futuro de los sectores productivos?",
+     o:["Porque permitirá automatizar y optimizar cada vez más procesos y decisiones","Porque eliminará la necesidad de cualquier fuente de energía","Porque sustituirá las leyes de la física","Porque no requiere ningún dato para funcionar"],c:0},
+
+    // UT5 — Big data
+    {u:5,t:"¿Cuál es la diferencia principal entre \"dato\" e \"información\"?",
+     o:["No hay diferencia, son sinónimos","El dato es un elemento en bruto; la información es el resultado de procesar y dar contexto a los datos","La información siempre es falsa y el dato siempre verdadero","El dato solo existe en papel"],c:1},
+    {u:5,t:"El \"ciclo de vida del dato\" incluye habitualmente fases como:",
+     o:["Solo la fase de borrado","Generación, recogida, almacenamiento, procesamiento/análisis y uso del dato","Únicamente la impresión en papel","Solo la venta a terceros"],c:1},
+    {u:5,t:"El término \"Big Data\" hace referencia a:",
+     o:["Copias de seguridad en CD-ROM","Un tipo de virus informático","Grandes volúmenes de datos, generados a gran velocidad y variedad, difíciles de tratar con herramientas tradicionales","Bases de datos de menos de 1 MB"],c:2},
+    {u:5,t:"La ciencia de datos (data science) en una empresa tiene como objetivo principal:",
+     o:["Extraer conocimiento y valor útil para la toma de decisiones a partir de los datos","Eliminar todos los datos históricos","Sustituir a todo el personal de la empresa","Imprimir los datos en papel"],c:0},
+    {u:5,t:"¿Dónde se almacenan habitualmente los grandes volúmenes de datos de una empresa moderna para acceder a ellos con flexibilidad?",
+     o:["Únicamente en memorias USB","Solo en papel impreso","En sistemas de almacenamiento en la nube / cloud","Solo en la memoria RAM del ordenador"],c:2},
+    {u:5,t:"La relación entre Big Data, machine/deep learning e inteligencia artificial es que:",
+     o:["Son tecnologías totalmente independientes, sin conexión entre ellas","El Big Data proporciona los datos que alimentan los algoritmos de aprendizaje que dan lugar a sistemas de IA","El deep learning sustituye a los datos","No existe ninguna relación entre ellos"],c:1},
+
+    // UT6 — Ciberseguridad
+    {u:6,t:"La ciberseguridad tiene como principal objetivo:",
+     o:["Aumentar la velocidad de internet","Proteger sistemas, redes y datos frente a accesos no autorizados o ataques","Diseñar páginas web más atractivas","Reducir el consumo eléctrico de los ordenadores"],c:1},
+    {u:6,t:"El \"phishing\" es una técnica que consiste en:",
+     o:["Un método de cifrado muy seguro","Un tipo de copia de seguridad automática","Engañar a una persona, normalmente por correo o mensaje, para que revele datos confidenciales","Un protocolo de red industrial"],c:2},
+    {u:6,t:"Un \"ransomware\" es un tipo de software malicioso que:",
+     o:["Mejora el rendimiento del ordenador","Secuestra o cifra los datos de un equipo y pide un rescate para liberarlos","Limpia virus automáticamente","Acelera la conexión a internet"],c:1},
+    {u:6,t:"¿Cuál de las siguientes es una buena práctica para crear una contraseña segura?",
+     o:["Usar la misma contraseña en todos los servicios","Usar el propio nombre y la fecha de nacimiento","Combinar letras, números y símbolos, y no reutilizarla en varios servicios","Usar solo cuatro caracteres numéricos"],c:2},
+    {u:6,t:"Un firewall (cortafuegos) es una herramienta que sirve para:",
+     o:["Apagar automáticamente el ordenador","Controlar y filtrar el tráfico de red entre un sistema y el exterior","Imprimir documentos de forma segura","Aumentar la velocidad del procesador"],c:1},
+    {u:6,t:"La protección de los datos en una empresa es importante porque:",
+     o:["Los datos no tienen ningún valor económico","La ley no regula en absoluto el uso de los datos","Su pérdida, robo o mal uso puede causar daños económicos, legales y de reputación","Solo afecta a empresas muy pequeñas"],c:2},
+
+    // UT7 — Proyecto de transformación digital
+    {u:7,t:"El primer paso para desarrollar un proyecto de transformación digital en una empresa debe ser:",
+     o:["Comprar la tecnología más cara del mercado","Identificar los objetivos estratégicos de la empresa","Despedir al personal más veterano","Eliminar todos los procesos actuales sin analizarlos"],c:1},
+    {u:7,t:"Al planificar qué áreas de una empresa digitalizar, es importante tener en cuenta:",
+     o:["Solo el precio de la tecnología, sin mirar nada más","Copiar exactamente lo que hace la competencia sin adaptarlo","Las necesidades presentes y futuras de la empresa y cómo encajan las áreas digitalizadas entre sí","Digitalizar todas las áreas a la vez, sin ningún orden"],c:2},
+    {u:7,t:"En un proyecto de transformación digital, documentar los cambios realizados es importante porque:",
+     o:["Es un requisito solo estético, sin utilidad real","Permite hacer seguimiento, evaluar resultados y mantener la trazabilidad de las decisiones","Sirve únicamente para archivar papel","No tiene relación con la seguridad de los datos"],c:1}
+  ];
+
+  var NOMBRES_UNIDAD = {
+    1:"UT1 · Digitalización en los sistemas productivos",
+    2:"UT2 · Tecnologías habilitadoras digitales",
+    3:"UT3 · Computación en la nube",
+    4:"UT4 · Inteligencia artificial",
+    5:"UT5 · Big data",
+    6:"UT6 · Ciberseguridad",
+    7:"UT7 · Proyecto de transformación digital"
+  };
+
+  // ---------------------------------------------------------------
+  // Estado
+  // ---------------------------------------------------------------
+  var preguntas = [];   // banco con opciones ya barajadas para esta sesión
+  var respuestas = [];  // índice de opción elegida por el alumno (o null)
+  var alumno = {apellido1:"", apellido2:"", nombre:"", ciclo:"", codigo:""};
+  var indiceActual = 0;
+  var envioEnCurso = false;
+
+  function barajar(array){
+    var a = array.slice();
+    for(var i=a.length-1;i>0;i--){
+      var j = Math.floor(Math.random()*(i+1));
+      var tmp=a[i]; a[i]=a[j]; a[j]=tmp;
+    }
+    return a;
+  }
+
+  function prepararPreguntas(){
+    preguntas = BANCO.map(function(p){
+      var correctaTexto = p.o[p.c];
+      var opcionesBarajadas = barajar(p.o);
+      return {
+        unidad: p.u,
+        texto: p.t,
+        opciones: opcionesBarajadas,
+        correctaTexto: correctaTexto
+      };
+    });
+    respuestas = new Array(preguntas.length).fill(null);
+  }
+
+  var tarjeta = document.getElementById("tarjeta");
+
+  // ---------------------------------------------------------------
+  // Pantalla de bienvenida
+  // ---------------------------------------------------------------
+  function pintarBienvenida(){
+    tarjeta.innerHTML =
+      '<div class="aviso">'+
+        'Esta prueba <strong>no es una actividad evaluable</strong>: no cuenta para tu nota. '+
+        'Su único objetivo es conocer el nivel de partida del grupo y el tuyo en particular, para poder '+
+        'ajustar mejor las clases. Contesta con sinceridad y sin buscar las respuestas — no pasa nada si no sabes algunas, '+
+        '¡para eso estamos aquí!'+
+      '</div>'+
+      '<div class="campo"><label for="ip_nombre">Nombre</label>'+
+        '<input type="text" id="ip_nombre" autocomplete="given-name" placeholder="Ej: María"></div>'+
+      '<div class="fila2">'+
+        '<div class="campo"><label for="ip_ap1">Primer apellido</label>'+
+          '<input type="text" id="ip_ap1" autocomplete="family-name" placeholder="Ej: García"></div>'+
+        '<div class="campo"><label for="ip_ap2">Segundo apellido</label>'+
+          '<input type="text" id="ip_ap2" autocomplete="additional-name" placeholder="Ej: López"></div>'+
+      '</div>'+
+      '<div class="campo"><label for="ip_ciclo">Nombre del ciclo formativo</label>'+
+        '<input type="text" id="ip_ciclo" list="dl_ciclos" placeholder="Ej: Construcciones Metálicas">'+
+        '<datalist id="dl_ciclos">'+
+          '<option value="Construcciones Metálicas">'+
+          '<option value="Diseño en Fabricación Mecánica">'+
+        '</datalist>'+
+      '</div>'+
+      '<div class="campo"><label for="ip_codigo">Código del ciclo formativo</label>'+
+        '<input type="text" id="ip_codigo" placeholder="Ej: FME301"></div>'+
+      '<div class="error-txt" id="errorInicio">Por favor, completa todos los campos antes de empezar.</div>'+
+      '<div class="btn-fila"><button class="btn der" id="btnEmpezar" type="button">Empezar la prueba</button></div>';
+
+    document.getElementById("btnEmpezar").addEventListener("click", function(){
+      var nombre = document.getElementById("ip_nombre").value.trim();
+      var ap1 = document.getElementById("ip_ap1").value.trim();
+      var ap2 = document.getElementById("ip_ap2").value.trim();
+      var ciclo = document.getElementById("ip_ciclo").value.trim();
+      var codigo = document.getElementById("ip_codigo").value.trim();
+      if(!nombre || !ap1 || !ap2 || !ciclo || !codigo){
+        document.getElementById("errorInicio").style.display = "block";
+        return;
+      }
+      alumno = {apellido1:ap1, apellido2:ap2, nombre:nombre, ciclo:ciclo, codigo:codigo};
+      prepararPreguntas();
+      indiceActual = 0;
+      pintarPregunta();
+    });
+  }
+
+  // ---------------------------------------------------------------
+  // Pantalla de pregunta
+  // ---------------------------------------------------------------
+  function pintarPregunta(){
+    var p = preguntas[indiceActual];
+    var total = preguntas.length;
+    var pct = Math.round(((indiceActual+1)/total)*100);
+
+    var opcionesHtml = p.opciones.map(function(op, idx){
+      var marcada = respuestas[indiceActual] === idx;
+      return (
+        '<label class="opcion'+(marcada?' seleccionada':'')+'" data-idx="'+idx+'">'+
+          '<input type="radio" name="opcion" value="'+idx+'" '+(marcada?'checked':'')+'>'+
+          '<span>'+escapeHtml(op)+'</span>'+
+        '</label>'
+      );
+    }).join("");
+
+    tarjeta.innerHTML =
+      '<div class="progreso-wrap">'+
+        '<div class="progreso-texto"><span>Pregunta '+(indiceActual+1)+' de '+total+'</span><span>'+pct+'%</span></div>'+
+        '<div class="barra-fondo"><div class="barra-rellena" style="width:'+pct+'%"></div></div>'+
+      '</div>'+
+      '<span class="unidad-tag">'+escapeHtml(NOMBRES_UNIDAD[p.unidad])+'</span>'+
+      '<p class="pregunta-texto">'+escapeHtml(p.texto)+'</p>'+
+      '<fieldset id="opcionesGrupo">'+opcionesHtml+'</fieldset>'+
+      '<div class="btn-fila">'+
+        '<button class="btn secundario" id="btnAnterior" type="button" '+(indiceActual===0?'disabled':'')+'>Anterior</button>'+
+        '<button class="btn der" id="btnSiguiente" type="button" disabled>'+
+          (indiceActual===total-1 ? 'Finalizar y enviar' : 'Siguiente')+
+        '</button>'+
+      '</div>';
+
+    var btnSiguiente = document.getElementById("btnSiguiente");
+    if(respuestas[indiceActual] !== null){ btnSiguiente.disabled = false; }
+
+    document.querySelectorAll("#opcionesGrupo .opcion").forEach(function(el){
+      el.addEventListener("click", function(){
+        var idx = parseInt(el.getAttribute("data-idx"), 10);
+        respuestas[indiceActual] = idx;
+        document.querySelectorAll("#opcionesGrupo .opcion").forEach(function(o){o.classList.remove("seleccionada");});
+        el.classList.add("seleccionada");
+        btnSiguiente.disabled = false;
+      });
+    });
+
+    document.getElementById("btnAnterior").addEventListener("click", function(){
+      if(indiceActual>0){ indiceActual--; pintarPregunta(); window.scrollTo(0,0); }
+    });
+
+    btnSiguiente.addEventListener("click", function(){
+      if(respuestas[indiceActual] === null) return;
+      if(indiceActual < total-1){
+        indiceActual++;
+        pintarPregunta();
+        window.scrollTo(0,0);
+      } else {
+        finalizarYEnviar();
+      }
+    });
+  }
+
+  function escapeHtml(str){
+    var d = document.createElement("div");
+    d.textContent = str;
+    return d.innerHTML;
+  }
+
+  // ---------------------------------------------------------------
+  // Cálculo de resultados
+  // ---------------------------------------------------------------
+  function calcularResultados(){
+    var aciertos = 0;
+    var detalle = [];
+    var porUnidad = {};
+
+    preguntas.forEach(function(p, i){
+      var idxElegido = respuestas[i];
+      var textoElegido = (idxElegido !== null) ? p.opciones[idxElegido] : "(sin responder)";
+      var esCorrecta = textoElegido === p.correctaTexto;
+      if(esCorrecta) aciertos++;
+
+      if(!porUnidad[p.unidad]) porUnidad[p.unidad] = {ok:0, total:0};
+      porUnidad[p.unidad].total++;
+      if(esCorrecta) porUnidad[p.unidad].ok++;
+
+      detalle.push({
+        numero: i+1,
+        unidad: p.unidad,
+        pregunta: p.texto,
+        respuestaAlumno: textoElegido,
+        correcta: p.correctaTexto,
+        esCorrecta: esCorrecta
+      });
+    });
+
+    var total = preguntas.length;
+    var fallos = total - aciertos;
+    var porcentaje = Math.round((aciertos/total)*100);
+
+    return {aciertos:aciertos, fallos:fallos, total:total, porcentaje:porcentaje, detalle:detalle, porUnidad:porUnidad};
+  }
+
+  function generarValoracion(res){
+    var pct = res.porcentaje;
+    var banda, textoBanda;
+    if(pct >= 90){ banda="Excelente"; textoBanda="muestra un dominio muy alto de los conceptos generales del módulo, superior al esperado antes de empezar el curso"; }
+    else if(pct >= 75){ banda="Alto"; textoBanda="parte de una base sólida en la mayoría de los bloques del módulo"; }
+    else if(pct >= 50){ banda="Medio"; textoBanda="parte de un nivel intermedio, con conocimientos generales pero con conceptos importantes por reforzar"; }
+    else if(pct >= 25){ banda="Bajo"; textoBanda="parte de un nivel bajo de conocimientos previos sobre los contenidos del módulo, será necesario reforzar la mayoría de los bloques"; }
+    else { banda="Muy bajo"; textoBanda="parte prácticamente sin conocimientos previos sobre los contenidos del módulo"; }
+
+    // Mejor y peor unidad (solo si hay variación relevante)
+    var unidades = Object.keys(res.porUnidad).map(function(k){
+      var u = res.porUnidad[k];
+      return {u:parseInt(k,10), pct: u.total? (u.ok/u.total*100):0, ok:u.ok, total:u.total};
+    });
+    unidades.sort(function(a,b){return b.pct - a.pct;});
+    var mejor = unidades[0];
+    var peor = unidades[unidades.length-1];
+
+    var frase = "Nivel de partida: "+banda+" ("+pct+"% de aciertos, "+res.aciertos+" de "+res.total+"). El alumno/a "+textoBanda+".";
+    if(mejor && peor && mejor.pct > peor.pct){
+      frase += " Bloque más fuerte: "+NOMBRES_UNIDAD[mejor.u]+" ("+Math.round(mejor.pct)+"% de aciertos). "+
+               "Bloque a reforzar: "+NOMBRES_UNIDAD[peor.u]+" ("+Math.round(peor.pct)+"% de aciertos).";
+    }
+    return frase;
+  }
+
+  function textoDesglosePorUnidad(res){
+    return Object.keys(res.porUnidad).sort().map(function(k){
+      var u = res.porUnidad[k];
+      var pct = u.total? Math.round(u.ok/u.total*100) : 0;
+      return NOMBRES_UNIDAD[k]+": "+u.ok+"/"+u.total+" ("+pct+"%)";
+    }).join("\n");
+  }
+
+  function textoDetalleCompleto(res, incluirCorreccion){
+    return res.detalle.map(function(d){
+      var linea = "P"+d.numero+" ["+NOMBRES_UNIDAD[d.unidad]+"] "+d.pregunta+"\n   Respuesta: "+d.respuestaAlumno;
+      if(incluirCorreccion){
+        linea += "\n   Correcta: "+d.correcta+"  ->  "+(d.esCorrecta ? "ACIERTO" : "FALLO");
+      }
+      return linea;
+    }).join("\n\n");
+  }
+
+  // ---------------------------------------------------------------
+  // Finalizar: enviar a Formspree y mostrar resumen al alumno
+  // ---------------------------------------------------------------
+  function finalizarYEnviar(){
+    var res = calcularResultados();
+    var valoracion = generarValoracion(res);
+
+    tarjeta.innerHTML =
+      '<div class="progreso-wrap">'+
+        '<div class="progreso-texto"><span>Prueba finalizada</span><span>100%</span></div>'+
+        '<div class="barra-fondo"><div class="barra-rellena" style="width:100%"></div></div>'+
+      '</div>'+
+      '<h2 style="color:var(--azul-osc);margin-top:0;">¡Gracias, '+escapeHtml(alumno.nombre)+'!</h2>'+
+      '<p style="color:var(--texto-suave);font-size:0.92rem;">Aquí tienes tu resumen. Recuerda que esta prueba no es evaluable.</p>'+
+      '<div class="resumen-num">'+
+        '<div class="resumen-caja ok"><div class="n">'+res.aciertos+'</div><div class="l">Acertadas</div></div>'+
+        '<div class="resumen-caja ko"><div class="n">'+res.fallos+'</div><div class="l">Falladas</div></div>'+
+      '</div>'+
+      '<div class="campo"><label for="areaCopiar">Tus respuestas (puedes copiarlas y guardarlas)</label>'+
+        '<textarea id="areaCopiar" readonly></textarea></div>'+
+      '<div class="btn-fila"><button class="btn secundario" id="btnCopiar" type="button">Copiar al portapapeles</button></div>'+
+      '<div class="estado-envio enviando" id="estadoEnvio">Enviando tus resultados al profesor…</div>';
+
+    var textoParaAlumno =
+      "EVALUACIÓN INICIAL - DASP\n"+
+      "Alumno/a: "+alumno.nombre+" "+alumno.apellido1+" "+alumno.apellido2+"\n"+
+      "Ciclo: "+alumno.ciclo+" ("+alumno.codigo+")\n"+
+      "Resultado: "+res.aciertos+" acertadas / "+res.fallos+" falladas (sobre "+res.total+")\n\n"+
+      "TUS RESPUESTAS:\n\n"+
+      textoDetalleCompleto(res, false);
+
+    document.getElementById("areaCopiar").value = textoParaAlumno;
+
+    document.getElementById("btnCopiar").addEventListener("click", function(){
+      var area = document.getElementById("areaCopiar");
+      var boton = document.getElementById("btnCopiar");
+      var marcarCopiado = function(){ boton.textContent = "¡Copiado!"; setTimeout(function(){ boton.textContent="Copiar al portapapeles"; },1800); };
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(area.value).then(marcarCopiado).catch(function(){
+          area.focus(); area.select();
+          try{ document.execCommand("copy"); marcarCopiado(); }catch(e){}
+        });
+      } else {
+        area.focus(); area.select();
+        try{ document.execCommand("copy"); marcarCopiado(); }catch(e){}
+      }
+    });
+
+    enviarAFormspree(res, valoracion);
+  }
+
+  function enviarAFormspree(res, valoracion){
+    if(envioEnCurso) return;
+    envioEnCurso = true;
+
+    var payload = {
+      _subject: "Evaluación inicial DASP - "+alumno.nombre+" "+alumno.apellido1+" "+alumno.apellido2,
+      nombre: alumno.nombre,
+      primer_apellido: alumno.apellido1,
+      segundo_apellido: alumno.apellido2,
+      ciclo_formativo: alumno.ciclo,
+      codigo_ciclo: alumno.codigo,
+      aciertos: res.aciertos,
+      fallos: res.fallos,
+      total_preguntas: res.total,
+      porcentaje_acierto: res.porcentaje+"%",
+      valoracion_conocimientos: valoracion,
+      desglose_por_unidad: textoDesglosePorUnidad(res),
+      respuestas_detalladas: textoDetalleCompleto(res, true),
+      fecha_hora: new Date().toLocaleString("es-ES")
+    };
+
+    fetch(FORMSPREE_URL, {
+      method: "POST",
+      headers: {"Content-Type":"application/json", "Accept":"application/json"},
+      body: JSON.stringify(payload)
+    }).then(function(resp){
+      envioEnCurso = false;
+      var estado = document.getElementById("estadoEnvio");
+      if(!estado) return;
+      if(resp.ok){
+        estado.className = "estado-envio ok";
+        estado.textContent = "Resultados enviados correctamente al profesor. Ya puedes copiar tus respuestas si quieres guardarlas.";
+      } else {
+        mostrarErrorEnvio();
+      }
+    }).catch(function(){
+      envioEnCurso = false;
+      mostrarErrorEnvio();
+    });
+  }
+
+  function mostrarErrorEnvio(){
+    var estado = document.getElementById("estadoEnvio");
+    if(!estado) return;
+    estado.className = "estado-envio error";
+    estado.innerHTML = "No se ha podido enviar automáticamente (posible fallo de conexión). "+
+      "Por favor, copia tus respuestas con el botón de arriba y avisa a tu profesor. "+
+      "<button class=\"btn secundario\" id=\"btnReintentar\" type=\"button\" style=\"margin-top:8px;\">Reintentar envío</button>";
+    var btn = document.getElementById("btnReintentar");
+    if(btn){
+      btn.addEventListener("click", function(){
+        var res = calcularResultados();
+        var valoracion = generarValoracion(res);
+        estado.className = "estado-envio enviando";
+        estado.textContent = "Reintentando el envío…";
+        enviarAFormspree(res, valoracion);
+      });
+    }
+  }
+
+  // ---------------------------------------------------------------
+  pintarBienvenida();
+})();
+</script>
+</body>
+</html>
